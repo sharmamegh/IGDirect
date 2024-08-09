@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <Button
+        android:id="@+id/centredUrlButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_frame_gradient"
+        android:maxEms="22"
+        android:minEms="11"
+        android:text="@string/go_back_to_ig_direct"
+        android:textColor="#000000" />
+</LinearLayout>

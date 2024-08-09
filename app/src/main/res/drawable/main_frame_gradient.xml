@@ -1,0 +1,24 @@
+<!-- res/drawable/gradient_layer.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape
+            android:shape="rectangle">
+            <gradient
+                android:startColor="@color/lapis_lazuli"
+                android:centerColor="@color/fire_engine_red"
+                android:endColor="@color/school_bus_yellow"
+                android:angle="45"
+                android:type="linear" />
+        </shape>
+    </item>
+    <item
+        android:left="16dp"
+        android:top="16dp"
+        android:right="16dp"
+        android:bottom="16dp">
+        <shape
+            android:shape="rectangle">
+            <solid android:color="@android:color/transparent"/>
+        </shape>
+    </item>
+</layer-list>
