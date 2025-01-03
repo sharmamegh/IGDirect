@@ -4,20 +4,26 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.TextView
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import java.util.Locale
 
 class TimedActivity : AppCompatActivity() {
-    private lateinit var webView: WebView
+    private lateinit var distractionView: WebView
+    private lateinit var countdownText: TextView
 
-    // Start a countdown timer for 2 minutes (120 seconds)
-    private val timer: CountDownTimer = object : CountDownTimer(90000, 1000) {
+    // Start a countdown timer for 1 minute (60 seconds)
+    private val timer: CountDownTimer = object : CountDownTimer(60000, 1000) {
         override fun onTick(millisUntilFinished: Long) {
-            // Optional: You can update UI to show countdown if needed
+            val secondsRemaining = millisUntilFinished / 1000
+            countdownText.text = String.format(Locale.getDefault(), "%d", secondsRemaining)
         }
 
         override fun onFinish() {
@@ -38,33 +44,40 @@ class TimedActivity : AppCompatActivity() {
             insets
         }
 
-        // Initialize the WebView after setContentView
-        webView = findViewById(R.id.webView)
+        countdownText = findViewById(R.id.countdownText)
+        distractionView = findViewById(R.id.webView)
 
-        // Retrieve URL from Intent extras
         val url: String = intent.getStringExtra("TIMED_URL") ?: ""
 
-        webView.webViewClient = WebViewClient()
-        // Enable JavaScript (optional)
-        webView.settings.javaScriptEnabled = true
-        webView.loadUrl(url)
+        distractionView.webViewClient = WebViewClient()
+
+        distractionView.settings.apply {
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            databaseEnabled = true
+            cacheMode = WebSettings.LOAD_DEFAULT
+            loadsImagesAutomatically = true
+            mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+        }
+        distractionView.loadUrl(url)
         // Start the countdown timer
         timer.start()
+
+        onBackPressedDispatcher.addCallback(this) {
+            if (distractionView.canGoBack()) {
+                distractionView.goBack()  // Go back in WebView history
+            } else {
+                // If WebView can't go back, clear webView history and finish the activity
+                distractionView.clearHistory()
+                finish()
+            }
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         timer.cancel() // Cancel the timer to avoid memory leaks
         // Dispose of the WebView to avoid potential memory leaks
-        webView.destroy()
-    }
-
-    @Deprecated("This method has been deprecated in favor of using the\n      {@link OnBackPressedDispatcher} via {@link #getOnBackPressedDispatcher()}.\n      The OnBackPressedDispatcher controls how back button events are dispatched\n      to one or more {@link OnBackPressedCallback} objects.")
-    override fun onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack()
-        } else {
-            super.onBackPressed()
-        }
+        distractionView.destroy()
     }
 }

@@ -18,6 +18,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <TextView
+            android:id="@+id/countdownText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="60"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:textColor="@color/fire_engine_red"
+            android:layout_gravity="center_horizontal|top"
+            android:padding="30dp"
+            android:fontFamily="casual"
+            android:gravity="center" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="match_parent"
